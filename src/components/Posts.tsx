@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { fetchData } from "../api/fetchGet";
-import { getRandomNumber } from "../Helper/Utils";
+import { useHistory } from "react-router";
+import { fetchData } from "../api/fetchUtils";
+import { getRandomNumber } from "../helper/Utils";
 import postImg from "../images/post.jpg";
-import Post from "./Post";
 
-const Posts = () => {
+const Posts: React.FC = () => {
+  const history = useHistory();
+
   interface Posts {
     id: number;
     title: string;
     body: string;
   }
   const [posts, setPosts] = useState<Array<Posts>>([]);
-  const [isPostVisible, setIsPostVisible] = useState({
-    postVisible: false,
-    postId: 1,
-  });
 
   useEffect(() => {
     const randomUser = getRandomNumber(1, 10);
@@ -22,25 +20,18 @@ const Posts = () => {
     fetchData(url, setPosts);
   }, []);
 
-  return isPostVisible.postVisible ? (
-    <Post postId={isPostVisible?.postId} />
-  ) : (
+  return (
     <div>
       {posts.map((post) => (
         <div
-          key={post.id}
+          key={post?.id}
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() =>
-            setIsPostVisible({
-              postVisible: true,
-              postId: post.id,
-            })
-          }
+          onClick={() => history.push(`/posts/${post?.id}`)}
         >
           <img src={postImg} alt="logo" width="250px" height="125px" />
           <div style={{ padding: "20px" }}>
-            <h2>{post.title}</h2>
-            <p>{post.body}</p>
+            <h2>{post?.title}</h2>
+            <p>{post?.body}</p>
           </div>
         </div>
       ))}

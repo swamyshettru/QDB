@@ -1,7 +1,9 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Switch } from "react-router-dom";
 import GenericError from "../components/GenericError";
+import Post from "../components/Post";
 import Posts from "../components/Posts";
+import { DASHBOARD_CONTENT } from "../helper/constants";
 
 const getRoutes = () => {
   /**
@@ -15,14 +17,19 @@ const getRoutes = () => {
           <Posts />
         </ErrorBoundary>
       </Route>
-      <Route path="/posts">
+      <Route exact path="/posts">
         <ErrorBoundary fallback={<GenericError />}>
           <Posts />
         </ErrorBoundary>
       </Route>
+      <Route path={"/posts/:id"}>
+        <ErrorBoundary fallback={<GenericError />}>
+          <Post />
+        </ErrorBoundary>
+      </Route>
       <Route path="/dashboard">
         <ErrorBoundary fallback={<GenericError />}>
-          <div>Please slect option from the side menu</div>
+          <div>{DASHBOARD_CONTENT}</div>
         </ErrorBoundary>
       </Route>
     </Switch>

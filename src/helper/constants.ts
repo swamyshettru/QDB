@@ -1,0 +1,5 @@
+export const PUT = 'PUT'
+export const CONTENT_TYPE = 'application/json; charset=UTF-8'
+export const DASHBOARD_CONTENT = 'Please slect option from the side menu'
+export const DASHBOARD_LABEL = 'DASHBOARD'
+export const BLOGS_LABEL = 'BLOGS'

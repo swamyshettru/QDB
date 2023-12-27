@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Sidebar from "./Sidebar";
 
-describe("Test for sidebar", () => {
+describe("Tests for sidebar", () => {
   test("check if sidebar is getting rendered", () => {
     render(<Sidebar />);
     const linkElement = screen.getByText(/DASHBOARD/i);

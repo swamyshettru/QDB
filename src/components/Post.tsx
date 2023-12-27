@@ -2,11 +2,9 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import postImg from "../images/post.jpg";
 import { Button, Flex, Input } from "antd";
-import { fetchData } from "../api/fetchGet";
-
-interface props {
-  postId: number;
-}
+import { fetchData, updateData } from "../api/fetchUtils";
+import { CONTENT_TYPE } from "../helper/constants";
+import { useParams } from "react-router-dom";
 
 interface postType {
   id: number;
@@ -14,19 +12,33 @@ interface postType {
   body: string;
 }
 
-const Post: React.FC<props> = ({ postId }) => {
+const Post: React.FC = () => {
+  let { id } = useParams<{ id: string }>();
+
   const [post, setPost] = useState<postType>({ id: 1, title: "", body: "" });
   const [editedPost, setEditedPost] = useState(post.body);
   const [editClicked, setEditClicked] = useState(false);
+  const url = `${process.env.REACT_APP_BASE_API_URL_POSTS}${id}`;
 
   useEffect(() => {
-    const url = `${process.env.REACT_APP_BASE_API_URL_POSTS}${postId}`;
     fetchData(url, setPost);
-  }, [editedPost]);
+  }, [url]);
 
+  const updatePost = () => {
+    const headers = {
+      "Content-type": CONTENT_TYPE,
+    };
+    const body = JSON.stringify({
+      id: 1,
+      title: post.title,
+      body: editedPost,
+    });
+
+    updateData(url, headers, body);
+  };
   return (
     <>
-      <div key={postId} style={{ display: "flex", alignItems: "center" }}>
+      <div key={id} style={{ display: "flex", alignItems: "center" }}>
         <img src={postImg} alt="logo" width="250px" height="125px" />
         <div style={{ padding: "20px" }}>
           <h2>{post.title}</h2>
@@ -44,7 +56,7 @@ const Post: React.FC<props> = ({ postId }) => {
           <Button type="primary" onClick={() => setEditClicked(true)}>
             Edit
           </Button>
-          <Button>Save</Button>
+          <Button onClick={() => updatePost()}>Save</Button>
         </Flex>
       </div>
     </>

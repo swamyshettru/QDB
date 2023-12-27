@@ -8,12 +8,13 @@ import {
 import { Layout, Menu, Space, Avatar } from "antd";
 import logo from "../../images/logo.png";
 import { useHistory } from "react-router-dom";
-import { getRandomNumber } from "../../Helper/Utils";
-import { fetchData } from "../../api/fetchGet";
+import { getRandomNumber } from "../../helper/Utils";
+import { fetchData } from "../../api/fetchUtils";
+import { BLOGS_LABEL, DASHBOARD_LABEL } from "../../helper/constants";
 
 const { Sider } = Layout;
 
-const Sidebar = () => {
+const Sidebar: React.FC = () => {
   let history = useHistory();
 
   type Users = {
@@ -64,12 +65,12 @@ const Sidebar = () => {
             {
               key: "/dashboard",
               icon: <DashboardOutlined />,
-              label: `DASHBOARD`,
+              label: DASHBOARD_LABEL,
             },
             {
               key: "/posts",
               icon: <SolutionOutlined />,
-              label: `BLOGS`,
+              label: BLOGS_LABEL,
             },
           ]}
           onClick={({ key }) => history.push(key)}
