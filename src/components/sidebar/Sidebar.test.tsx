@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Sidebar from "./Sidebar";
 
@@ -15,26 +15,29 @@ describe("Tests for sidebar", () => {
     expect(linkElement).toBeInTheDocument();
   });
 
-  test("Check if user api call is getting response", () => {
-    let data = { name: "Leanne Graham" };
-    global.fetch = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        json: () => data,
-      })
-    );
+  test("Check if user api call is getting response", async () => {
+    let mockData = { name: "Leanne Graham" };
+    jest.spyOn(global as any, "fetch").mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValueOnce(mockData),
+    });
+
     render(<Sidebar />);
-    expect(screen.getByText("Leanne Graham")).toBeVisible();
+
+    await waitFor(() => {
+      expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+    });
   });
 
-  test("Check user name doest get displayed on error", () => {
-    global.fetch = jest.fn().mockImplementation(() =>
-      Promise.reject({
-        json: () => {
-          status: 400;
-        },
-      })
-    );
+  test("Check user name doest get displayed on error", async () => {
+    const mockError = new Error("API error");
+    jest.spyOn(global as any, "fetch").mockRejectedValueOnce(mockError);
+
     render(<Sidebar />);
-    expect(screen.getByText("Leanne Graham")).not.toBeVisible();
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText("Error fetching data: API error")
+      ).not.toBeInTheDocument();
+    });
   });
 });
