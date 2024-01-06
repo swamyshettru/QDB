@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import GenericError from "../components/GenericError";
 import Post from "../components/Post";
 import Posts from "../components/Posts";
-import { DASHBOARD_CONTENT } from "../helper/constants";
+import Dashboard from "../components/Dashboard";
 
 const getRoutes = () => {
   /**
@@ -29,7 +29,7 @@ const getRoutes = () => {
       </Route>
       <Route path="/dashboard">
         <ErrorBoundary fallback={<GenericError />}>
-          <div>{DASHBOARD_CONTENT}</div>
+          <div>{<Dashboard />}</div>
         </ErrorBoundary>
       </Route>
     </Switch>
