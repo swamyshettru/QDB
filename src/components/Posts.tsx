@@ -35,7 +35,7 @@ const Posts: React.FC = () => {
         <div
           key={post?.id}
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() => history.push(`/posts/${post?.id}`)}
+          // onClick={() => history.push(`/posts/${post?.id}`)}
         >
           <img
             src={postImg}
@@ -43,10 +43,13 @@ const Posts: React.FC = () => {
             width="250px"
             // height="auto"
             style={{ margin: "10px" }}
+            onClick={() => history.push(`/posts/${post?.id}`)}
           />
           <div style={{ alignSelf: "baseline" }}>
-            <h2>{post?.title}</h2>
-            <p>{post?.body}</p>
+            <div onClick={() => history.push(`/posts/${post?.id}`)}>
+              <h2>{post?.title}</h2>
+              <p>{post?.body}</p>
+            </div>
             <div>
               <Flex gap="small" wrap="wrap" justify={"start"}>
                 <Button
