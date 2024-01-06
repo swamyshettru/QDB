@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { fetchData } from "../api/fetchUtils";
+import { deleteData, fetchData } from "../api/fetchUtils";
 import { getRandomNumber } from "../helper/Utils";
 import postImg from "../images/post.jpg";
+import { Button, Flex } from "antd";
 
 const Posts: React.FC = () => {
   const history = useHistory();
@@ -16,22 +17,57 @@ const Posts: React.FC = () => {
 
   useEffect(() => {
     const randomUser = getRandomNumber(1, 10);
-    const url = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}/posts`;
+    const url: string = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}/posts`;
     fetchData(url, setPosts);
   }, []);
+
+  const deletePost = (id: number) => {
+    let filtered = posts.filter((post) => {
+      return post.id != id;
+    });
+    setPosts(filtered);
+    // deleteData(url);
+  };
 
   return (
     <div>
       {posts.map((post) => (
         <div
           key={post?.id}
-          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() => history.push(`/posts/${post?.id}`)}
+          style={{ display: "flex", alignItems: "center" }}
+          // onClick={() => history.push(`/posts/${post?.id}`)}
         >
-          <img src={postImg} alt="logo" width="250px" height="125px" />
-          <div style={{ padding: "20px" }}>
+          <img
+            src={postImg}
+            alt="logo"
+            width="250px"
+            // height="auto"
+            style={{ margin: "10px" }}
+          />
+          <div style={{ alignSelf: "baseline" }}>
             <h2>{post?.title}</h2>
             <p>{post?.body}</p>
+            <div>
+              <Flex gap="small" wrap="wrap" justify={"start"}>
+                <Button
+                  type="default"
+                  onClick={() => history.push(`/posts/${post?.id}`)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  danger
+                  onClick={() =>
+                    deletePost(
+                      // `${process.env.REACT_APP_BASE_API_URL_POSTS}${post?.id}`
+                      post?.id
+                    )
+                  }
+                >
+                  Delete
+                </Button>
+              </Flex>
+            </div>
           </div>
         </div>
       ))}

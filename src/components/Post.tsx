@@ -49,15 +49,15 @@ const Post: React.FC = () => {
           >
             {post.body}
           </Input.TextArea>
+          <Flex
+            gap="small"
+            wrap="wrap"
+            justify={"center"}
+            style={{ margin: "20px" }}
+          >
+            <Button onClick={() => updatePost()}>Save</Button>
+          </Flex>
         </div>
-      </div>
-      <div>
-        <Flex gap="small" wrap="wrap" justify={"center"}>
-          <Button type="primary" onClick={() => setEditClicked(true)}>
-            Edit
-          </Button>
-          <Button onClick={() => updatePost()}>Save</Button>
-        </Flex>
       </div>
     </>
   );

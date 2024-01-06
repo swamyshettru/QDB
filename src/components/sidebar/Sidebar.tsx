@@ -45,7 +45,14 @@ const Sidebar: React.FC = () => {
           align="center"
           style={{ width: "100%" }}
         >
-          <img src={logo} alt="logo" width="100px" height="54px" />
+          <img
+            src={logo}
+            alt="logo"
+            width="100px"
+            height="54px"
+            style={{ marginTop: "20px" }}
+            onClick={() => history.push("/")}
+          />
           <Space direction="vertical" size={16} align="center">
             <Avatar size={100} icon={<UserOutlined />} />
           </Space>

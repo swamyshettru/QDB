@@ -3,6 +3,7 @@ import "./App.css";
 import { Layout, theme, Input } from "antd";
 import Sidebar from "./components/sidebar/Sidebar";
 import Contents from "./components/Contents";
+import AppHeader from "./components/Header";
 
 const { Header } = Layout;
 const { Search } = Input;
@@ -22,13 +23,14 @@ const App: React.FC = () => {
         <Layout style={{ height: "100vh" }}>
           <Sidebar />
           <Layout>
-            <Header style={{ padding: 0, background: colorBgContainer }}>
+            {/* <Header style={{ padding: 0, background: colorBgContainer }}>
               <Search
                 placeholder="input search text"
                 allowClear
                 style={{ width: 500, marginTop: "20px", marginLeft: "20px" }}
               />
-            </Header>
+            </Header> */}
+            <AppHeader />
             <Contents />
           </Layout>
         </Layout>

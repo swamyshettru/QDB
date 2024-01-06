@@ -20,5 +20,14 @@ export const updateData = async (url:string, headers:any, body:string) => {
   }
 }
 
+export const deleteData =async (url:string) => {
+  try{
+    await fetch(url, {method:'DELETE'})
+  }
+  catch(error){
+    console.log("There was an error occured deleting blog post", error);
+  }
+}
+
 
 
