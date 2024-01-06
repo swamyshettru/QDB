@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import postImg from "../images/post.jpg";
 import { Button, Flex, Input } from "antd";
@@ -13,10 +13,11 @@ interface postType {
 }
 
 const Post: React.FC = () => {
+  const editPostRef = useRef<HTMLTextAreaElement>(null);
   let { id } = useParams<{ id: string }>();
 
   const [post, setPost] = useState<postType>({ id: 1, title: "", body: "" });
-  const [editedPost, setEditedPost] = useState(post.body);
+  const [editedPost, setEditedPost] = useState(editPostRef.current?.value);
   const [editClicked, setEditClicked] = useState(false);
   const url = `${process.env.REACT_APP_BASE_API_URL_POSTS}${id}`;
 
@@ -36,19 +37,22 @@ const Post: React.FC = () => {
 
     updateData(url, headers, body);
   };
+
   return (
     <>
       <div key={id} style={{ display: "flex", alignItems: "center" }}>
         <img src={postImg} alt="logo" width="250px" height="125px" />
         <div style={{ padding: "20px" }}>
           <h2>{post.title}</h2>
-          <Input.TextArea
+          <textarea
+            ref={editPostRef}
             value={editClicked ? editedPost : post.body}
             style={{ width: "550px", height: "110px" }}
             onChange={(e) => setEditedPost(e.target.value)}
+            onFocus={(e) => setEditClicked(true)}
           >
-            {post.body}
-          </Input.TextArea>
+            {editClicked ? editedPost : post.body}
+          </textarea>
           <Flex
             gap="small"
             wrap="wrap"

@@ -34,8 +34,8 @@ const Posts: React.FC = () => {
       {posts.map((post) => (
         <div
           key={post?.id}
-          style={{ display: "flex", alignItems: "center" }}
-          // onClick={() => history.push(`/posts/${post?.id}`)}
+          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          onClick={() => history.push(`/posts/${post?.id}`)}
         >
           <img
             src={postImg}
