@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Layout, theme, Input } from "antd";
-import Sidebar from "./components/sidebar/Sidebar";
+import Sidebar from "./components/Sidebar";
 import Contents from "./components/Contents";
 import AppHeader from "./components/Header";
 
