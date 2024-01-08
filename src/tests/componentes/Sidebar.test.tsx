@@ -1,43 +1,47 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Sidebar from "../../components/Sidebar";
+import * as useFetchModule from "../../hooks/useFetch";
+
+jest.mock("react-router-dom", () => ({
+  useHistory: () => ({
+    push: jest.fn(),
+  }),
+}));
 
 describe("Tests for sidebar", () => {
-  test("check if sidebar is getting rendered", () => {
-    render(<Sidebar />);
-    const linkElement = screen.getByText(/DASHBOARD/i);
-    expect(linkElement).toBeInTheDocument();
-  });
+  const props = { onError: jest.fn() };
+  const mockedUseFetch = jest.spyOn(useFetchModule, "useFetch");
 
-  test("check if 'BLOGS' menu item is getting rendered", () => {
-    render(<Sidebar />);
-    const linkElement = screen.getByText(/BLOGS/i);
-    expect(linkElement).toBeInTheDocument();
-  });
+  const setup = (mockData: any, mockError: any, mockLoading: any) => {
+    mockedUseFetch.mockReturnValue([mockData, mockError, mockLoading]);
 
-  test("Check if user api call is getting response", async () => {
-    let mockData = { name: "Leanne Graham" };
-    jest.spyOn(global as any, "fetch").mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce(mockData),
-    });
+    render(<Sidebar {...props} />);
+  };
 
-    render(<Sidebar />);
+  it("renders Sidebar component with error state", async () => {
+    setup(null, true, false);
 
+    // Wait for the error to be detected and handled
     await waitFor(() => {
-      expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+      expect(props.onError).toHaveBeenCalledWith(true);
     });
   });
 
-  test("Check user name doest get displayed on error", async () => {
-    const mockError = new Error("API error");
-    jest.spyOn(global as any, "fetch").mockRejectedValueOnce(mockError);
+  it("renders Sidebar component with loading state", () => {
+    setup(null, false, true);
+    const spinElement = screen.getByTestId("spinner");
 
-    render(<Sidebar />);
+    expect(spinElement).toBeInTheDocument();
+  });
 
+  it("renders Sidebar component with data", async () => {
+    const mockData = { name: "John Doe", email: "john.doe@example.com" };
+    setup(mockData, null, false);
+
+    // Wait for the data to be fetched and displayed
     await waitFor(() => {
-      expect(
-        screen.queryByLabelText("Error fetching data: API error")
-      ).not.toBeInTheDocument();
+      expect(screen.getByText("John Doe")).toBeInTheDocument();
     });
   });
 });

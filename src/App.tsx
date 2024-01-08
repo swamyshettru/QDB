@@ -1,42 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
-import { Layout, theme, Input } from "antd";
+import { Layout, Result } from "antd";
 import Sidebar from "./components/Sidebar";
 import Contents from "./components/Contents";
 import AppHeader from "./components/Header";
 
-const { Header } = Layout;
-const { Search } = Input;
-
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  /** render app layout(sidebar, header & content)**/
+  const [error, setError] = useState(false);
 
-  /**
-   * render app layout(sidebar, header & content)
-   *
-   */
-  return (
-    <>
-      {
-        <Layout style={{ height: "100vh" }}>
-          <Sidebar />
-          <Layout>
-            {/* <Header style={{ padding: 0, background: colorBgContainer }}>
-              <Search
-                placeholder="input search text"
-                allowClear
-                style={{ width: 500, marginTop: "20px", marginLeft: "20px" }}
-              />
-            </Header> */}
-            <AppHeader />
-            <Contents />
-          </Layout>
-        </Layout>
-      }
-    </>
-  );
+  if (error) {
+    return <Result status="500" subTitle="Sorry, something went wrong." />;
+  } else {
+    return (
+      <>
+        {
+          <div className="main-container">
+            <Layout>
+              <Sidebar onError={setError} />
+              <Layout>
+                <AppHeader />
+                <Contents />
+              </Layout>
+            </Layout>
+          </div>
+        }
+      </>
+    );
+  }
 };
 
 export default App;

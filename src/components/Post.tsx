@@ -1,57 +1,69 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
-import postImg from "../images/post.jpg";
-import { Button, Flex, Input } from "antd";
-import { fetchData, updateData } from "../api/fetchUtils";
-import { CONTENT_TYPE } from "../helper/constants";
-import { useParams } from "react-router-dom";
-
-interface postType {
-  id: number;
-  title: string;
-  body: string;
-}
+import { Button, Flex, Spin } from "antd";
+import { useHistory, useParams } from "react-router-dom";
+import { useFetch } from "../hooks/useFetch";
 
 const Post: React.FC = () => {
   const editPostRef = useRef<HTMLTextAreaElement>(null);
   let { id } = useParams<{ id: string }>();
+  let history = useHistory();
 
-  const [post, setPost] = useState<postType>({ id: 1, title: "", body: "" });
+  const url = `${process.env.REACT_APP_BASE_API_URL_POSTS}${id}`;
+  const [data, loading] = useFetch(url);
   const [editedPost, setEditedPost] = useState(editPostRef.current?.value);
   const [editClicked, setEditClicked] = useState(false);
-  const url = `${process.env.REACT_APP_BASE_API_URL_POSTS}${id}`;
+  const [updateInprogress, setUpdateInprogress] = useState(false);
 
-  useEffect(() => {
-    fetchData(url, setPost);
-  }, [url]);
+  const updatePost = async () => {
+    setUpdateInprogress(true);
 
-  const updatePost = () => {
-    const headers = {
-      "Content-type": CONTENT_TYPE,
-    };
-    const body = JSON.stringify({
+    const requestBody = {
       id: 1,
-      title: post.title,
+      title: data?.title,
       body: editedPost,
-    });
+    };
 
-    updateData(url, headers, body);
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        setUpdateInprogress(false);
+        history.push("/error-page");
+      }
+
+      const result = await response.json();
+      if (result) {
+        setUpdateInprogress(false);
+        history.push("/success");
+      }
+    } catch (error) {
+      setUpdateInprogress(false);
+      history.push("/error-page");
+    }
   };
 
-  return (
+  return updateInprogress || loading ? (
+    <Spin fullscreen />
+  ) : (
     <>
-      <div key={id} style={{ display: "flex", alignItems: "center" }}>
-        <img src={postImg} alt="logo" width="250px" height="125px" />
+      <div key={id} style={{ display: "flex", height: "100vh" }}>
         <div style={{ padding: "20px" }}>
-          <h2>{post.title}</h2>
+          <h2>{data?.title}</h2>
           <textarea
             ref={editPostRef}
-            value={editClicked ? editedPost : post.body}
-            style={{ width: "550px", height: "110px" }}
+            value={editClicked ? editedPost : data?.body}
+            style={{ width: "1260px", height: "160px" }}
             onChange={(e) => setEditedPost(e.target.value)}
             onFocus={(e) => setEditClicked(true)}
           >
-            {editClicked ? editedPost : post.body}
+            {editClicked ? editedPost : data?.body}
           </textarea>
           <Flex
             gap="small"

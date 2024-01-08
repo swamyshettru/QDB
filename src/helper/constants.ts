@@ -1,5 +1,10 @@
-export const PUT = 'PUT'
-export const CONTENT_TYPE = 'application/json; charset=UTF-8'
-export const DASHBOARD_CONTENT = 'Please slect option from the side menu'
-export const DASHBOARD_LABEL = 'DASHBOARD'
-export const BLOGS_LABEL = 'BLOGS'
+export const PUT = "PUT";
+export const CONTENT_TYPE = "application/json; charset=UTF-8";
+export const DASHBOARD_CONTENT = "Please slect option from the side menu";
+export const DASHBOARD_LABEL = "DASHBOARD";
+export const BLOGS_LABEL = "BLOGS";
+export const EDIT_TEXT = "Edit";
+export const DELETE_TEXT = "Delete";
+export const PROFILE_SOURCE = "https://i.pravatar.cc/300";
+export const ERROR_STATUS = "500";
+export const SOMETHING_WENT_WRONG_TEXT = "Sorry, something went wrong.";

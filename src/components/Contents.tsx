@@ -8,9 +8,9 @@ const Contents = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  /**
-   * Render the content as per the route
-   */
+  const navigate = getRoutes();
+
+  /**Render the content as per the route*/
   return (
     <div>
       <Content style={{ margin: "24px 16px 0" }}>
@@ -22,8 +22,7 @@ const Contents = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          {/* Render the content as per the route */}
-          {getRoutes()}
+          {navigate}
         </div>
       </Content>
     </div>

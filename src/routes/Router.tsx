@@ -4,6 +4,7 @@ import GenericError from "../components/GenericError";
 import Post from "../components/Post";
 import Posts from "../components/Posts";
 import Dashboard from "../components/Dashboard";
+import Success from "../components/Success";
 
 const getRoutes = () => {
   /**
@@ -30,6 +31,18 @@ const getRoutes = () => {
       <Route path="/dashboard">
         <ErrorBoundary fallback={<GenericError />}>
           <div>{<Dashboard />}</div>
+        </ErrorBoundary>
+      </Route>
+      <Route path="/success">
+        <ErrorBoundary fallback={<GenericError />}>
+          <div>
+            <Success />
+          </div>
+        </ErrorBoundary>
+      </Route>
+      <Route path="/error-page">
+        <ErrorBoundary fallback={<GenericError />}>
+          <div>{<GenericError />}</div>
         </ErrorBoundary>
       </Route>
     </Switch>

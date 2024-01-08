@@ -1,8 +1,6 @@
-import React from "react";
-import { Layout, theme, Input } from "antd";
+import { Layout, theme } from "antd";
 
 const { Header } = Layout;
-const { Search } = Input;
 
 const AppHeader = () => {
   const {
@@ -11,14 +9,7 @@ const AppHeader = () => {
 
   return (
     <div>
-      <Header style={{ padding: 0, background: colorBgContainer }}>
-        <Search
-          placeholder="input search text"
-          allowClear
-          style={{ width: 500, marginTop: "20px", marginLeft: "20px" }}
-          onChange={(e) => console.log(e.currentTarget.value)}
-        />
-      </Header>
+      <Header style={{ padding: 0, background: colorBgContainer }} />
     </div>
   );
 };

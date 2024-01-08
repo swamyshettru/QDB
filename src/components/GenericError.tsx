@@ -1,9 +1,22 @@
-import React from 'react'
+import React from "react";
+import { Result, Button } from "antd";
+import { useHistory } from "react-router";
 
 const GenericError = () => {
+  const history = useHistory();
   return (
-    <div>Something went worong, please try again later</div>
-  )
-}
+    <div>
+      <Result
+        status="500"
+        subTitle="Sorry, something went wrong."
+        extra={
+          <Button type="primary" onClick={() => history.push("/")}>
+            Back Home
+          </Button>
+        }
+      />
+    </div>
+  );
+};
 
-export default GenericError
+export default GenericError;

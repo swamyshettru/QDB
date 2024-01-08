@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../App.css";
 import {
   UserOutlined,
   DashboardOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Space, Avatar } from "antd";
+import { Layout, Menu, Space, Avatar, Spin } from "antd";
 import logo from "../images/logo.png";
 import { useHistory } from "react-router-dom";
 import { getRandomNumber } from "../helper/Utils";
-import { fetchData } from "../api/fetchUtils";
-import { BLOGS_LABEL, DASHBOARD_LABEL } from "../helper/constants";
+import {
+  BLOGS_LABEL,
+  DASHBOARD_LABEL,
+  PROFILE_SOURCE,
+} from "../helper/constants";
+import { useFetch } from "../hooks/useFetch";
 
 const { Sider } = Layout;
 
-const Sidebar: React.FC = () => {
+type sideBarProps = {
+  onError: (error: any) => void;
+};
+
+const Sidebar = (props: sideBarProps) => {
   let history = useHistory();
 
-  type Users = {
-    name: string;
-    email: string;
-  };
+  const randomUser = getRandomNumber(1, 10);
+  const url = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}`;
 
-  const [user, setUser] = useState<Users>({ name: "", email: "" });
+  const [data, error, loading] = useFetch(url);
 
-  /**
-   * fetch random user details on load
-   */
-  useEffect(() => {
-    const randomUser = getRandomNumber(1, 10);
-    const url = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}`;
-    fetchData(url, setUser);
-  }, []);
+  if (error) {
+    props?.onError(true);
+  }
 
-  /**
-   * render sidebar menu
-   */
-  return (
+  return loading ? (
+    <Spin className="spinner" data-testid="spinner" fullscreen />
+  ) : (
     <>
-      <Sider trigger={null} theme="light" style={{ height: "100vh" }}>
+      <Sider theme="light">
         <Space
           direction="vertical"
           size={16}
@@ -50,16 +50,23 @@ const Sidebar: React.FC = () => {
             alt="logo"
             width="100px"
             height="54px"
-            style={{ marginTop: "20px" }}
+            style={{ margin: "20px 0 0 17px" }}
             onClick={() => history.push("/")}
           />
-          <Space direction="vertical" size={16} align="center">
-            <Avatar size={100} icon={<UserOutlined />} />
-          </Space>
+          {error && <Avatar size={100} icon={<UserOutlined />} />}
+          {!error && (
+            <Space direction="vertical" size={16} align="center">
+              <Avatar
+                size={100}
+                icon={<UserOutlined />}
+                src={PROFILE_SOURCE || <UserOutlined />}
+              />
+            </Space>
+          )}
           <Space direction="vertical" size={5} align="center">
-            <span style={{ fontWeight: "bold" }}>{user?.name}</span>
+            <span style={{ fontWeight: "bold" }}>{data?.name}</span>
             <span style={{ textTransform: "lowercase", fontSize: "small" }}>
-              {user?.email}
+              {data?.email}
             </span>
           </Space>
         </Space>
