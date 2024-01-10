@@ -1,46 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 
-interface PutDataProps {
-  responseData: any | null;
-  updateError: string | null;
-  updateInprogress: boolean;
-}
+const usePutData = (url: string) => {
+  const [updateInprogress, setUpdateInprogress] = useState<boolean>(false);
+  const [updateError, setupdateError] = useState<any>(null);
+  const [updatedData, setUpdatedData] = useState<any>(null);
 
-const usePutData = (url: string, requestBody: object): PutDataProps => {
-  const [responseData, setData] = useState<any | null>(null);
-  const [updateError, setError] = useState<string | null>(null);
-  const [updateInprogress, setLoading] = useState<boolean>(true);
+  const makeRequest = useCallback(
+    async (requestData: object) => {
+      const config = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      };
 
-  useEffect(() => {
-    const fetchData = async () => {
+      setUpdateInprogress(true);
+      setupdateError(null);
       try {
-        const response = await fetch(url, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
-
-        if (!response.ok) {
-          throw new Error("Request failed");
-        }
-
+        const response = await fetch(url, config);
         const result = await response.json();
-        setData(result);
-        setError(null);
+        setUpdatedData(result);
       } catch (error) {
-        setData(null);
-        setError("Error during PUT request");
+        setupdateError(error);
+        //log error to any loggers
+        console.log(
+          `Something went wrong while updating post, error:  ${error}`
+        );
       } finally {
-        setLoading(false);
+        setUpdateInprogress(false);
       }
-    };
+    },
+    [url]
+  );
 
-    fetchData();
-  }, [url, requestBody]);
-
-  return { responseData, updateError, updateInprogress };
+  return { makeRequest, updatedData, updateInprogress, updateError };
 };
 
 export default usePutData;

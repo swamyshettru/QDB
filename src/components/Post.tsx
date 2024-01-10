@@ -1,53 +1,47 @@
 import React, { useRef } from "react";
 import { useState } from "react";
 import { Button, Flex, Spin } from "antd";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
+import * as constants from "../helper/constants";
+import usePutData from "../hooks/usePutData";
+import Success from "./Success";
+import GenericError from "./GenericError";
 
 const Post: React.FC = () => {
   const editPostRef = useRef<HTMLTextAreaElement>(null);
   let { id } = useParams<{ id: string }>();
-  let history = useHistory();
 
   const url = `${process.env.REACT_APP_BASE_API_URL_POSTS}${id}`;
-  const [data, loading] = useFetch(url);
+
+  //custom hooks to fetch a blog post
+  const [data, error, loading] = useFetch(url);
+
+  //custom hook to update a blog post
+  const { makeRequest, updatedData, updateInprogress, updateError } =
+    usePutData(url);
+
   const [editedPost, setEditedPost] = useState(editPostRef.current?.value);
   const [editClicked, setEditClicked] = useState(false);
-  const [updateInprogress, setUpdateInprogress] = useState(false);
 
+  //update blog post
   const updatePost = async () => {
-    setUpdateInprogress(true);
-
     const requestBody = {
       id: 1,
       title: data?.title,
       body: editedPost,
     };
 
-    try {
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        setUpdateInprogress(false);
-        history.push("/error-page");
-      }
-
-      const result = await response.json();
-      if (result) {
-        setUpdateInprogress(false);
-        history.push("/success");
-      }
-    } catch (error) {
-      setUpdateInprogress(false);
-      history.push("/error-page");
-    }
+    await makeRequest(requestBody);
   };
+
+  if (error || updateError) {
+    return <GenericError />;
+  }
+
+  if (updatedData) {
+    return <Success />;
+  }
 
   return updateInprogress || loading ? (
     <Spin fullscreen />
@@ -71,7 +65,7 @@ const Post: React.FC = () => {
             justify={"center"}
             style={{ margin: "20px" }}
           >
-            <Button onClick={() => updatePost()}>Save</Button>
+            <Button onClick={() => updatePost()}>{constants.SAVE_TEXT}</Button>
           </Flex>
         </div>
       </div>
