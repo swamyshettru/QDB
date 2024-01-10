@@ -1,5 +1,5 @@
 import { Layout, theme } from "antd";
-import getRoutes from "../routes/Router";
+import GetRoutes from "../routes/Router";
 
 const { Content } = Layout;
 
@@ -7,8 +7,6 @@ const Contents = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
-  const navigate = getRoutes();
 
   /**Render the content as per the route*/
   return (
@@ -22,7 +20,7 @@ const Contents = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          {navigate}
+          <GetRoutes />
         </div>
       </Content>
     </div>

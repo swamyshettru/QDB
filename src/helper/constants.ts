@@ -8,3 +8,14 @@ export const DELETE_TEXT = "Delete";
 export const PROFILE_SOURCE = "https://i.pravatar.cc/300";
 export const ERROR_STATUS = "500";
 export const SOMETHING_WENT_WRONG_TEXT = "Sorry, something went wrong.";
+export const ONE = 1;
+export const TEN = 10;
+export const DASHBOARD_ROUTE = "/dashboard";
+export const POSTS_ROUTE = "/posts";
+export const SAVE_TEXT = "Save";
+export const DASHBOARD_IMG =
+  "https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg";
+export const DASHBOARD_PLEASE_SELECT_OPTIONS_TEXT = `Please select options from the side menu `;
+export const BACK_HOME_TEXT = "Back Home";
+export const SUCCESS_STATUS = "success";
+export const SUCCESSFULLY_UPDATE_TEXT = "Successfully updated the post";

@@ -1,19 +1,19 @@
-import React from "react";
 import { Button, Empty } from "antd";
 import { useHistory } from "react-router";
+import * as constants from "../helper/constants";
 
 const Dashboard = () => {
   const history = useHistory();
   return (
     <Empty
-      image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      image={constants.DASHBOARD_IMG}
       description={
-        <span>Please select options from the side menu &#128522;</span>
+        <span>{constants.DASHBOARD_PLEASE_SELECT_OPTIONS_TEXT} &#128522;</span>
       }
       style={{ height: "100vh" }}
     >
       <Button type="primary" onClick={() => history.push("/posts")}>
-        Blogs
+        {constants.BLOGS_LABEL}
       </Button>
     </Empty>
   );

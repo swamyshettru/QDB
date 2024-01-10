@@ -1,17 +1,18 @@
-import React from "react";
 import { Result, Button } from "antd";
 import { useHistory } from "react-router";
+import * as constants from "../helper/constants";
 
 const GenericError = () => {
   const history = useHistory();
+
   return (
     <div>
       <Result
-        status="500"
-        subTitle="Sorry, something went wrong."
+        status={constants.ERROR_STATUS}
+        subTitle={constants.SOMETHING_WENT_WRONG_TEXT}
         extra={
           <Button type="primary" onClick={() => history.push("/")}>
-            Back Home
+            {constants.BACK_HOME_TEXT}
           </Button>
         }
       />

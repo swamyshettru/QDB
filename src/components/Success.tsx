@@ -1,24 +1,22 @@
-import React from "react";
 import { Button, Result } from "antd";
 import { useHistory } from "react-router";
+import * as constants from "../helper/constants";
 
 const Success = () => {
   const history = useHistory();
   return (
     <div>
       <Result
-        status="success"
-        title="Successfully updated the post"
-        // subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+        status={constants.SUCCESS_STATUS}
+        title={constants.SUCCESSFULLY_UPDATE_TEXT}
         extra={[
           <Button
             type="primary"
             key="console"
             onClick={() => history.push("/")}
           >
-            Back Home
+            {constants.BACK_HOME_TEXT}
           </Button>,
-          // <Button key="buy">Buy Again</Button>,
         ]}
       />
     </div>

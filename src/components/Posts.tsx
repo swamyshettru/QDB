@@ -13,8 +13,9 @@ import image8 from "../images/image-8.jpg";
 import image9 from "../images/image-9.jpg";
 import image10 from "../images/image-10.jpg";
 
-import { Button, Flex, Spin, Divider, Result } from "antd";
+import { Button, Flex, Spin, Divider } from "antd";
 import { useFetch } from "../hooks/useFetch";
+import GenericError from "./GenericError";
 
 const Posts: React.FC = () => {
   const history = useHistory();
@@ -30,13 +31,15 @@ const Posts: React.FC = () => {
     image9,
     image10,
   ];
-  const randomUser = getRandomNumber(1, 10);
+  const randomUser = getRandomNumber(constants.ONE, constants.TEN);
   /**get list of posts for a random user */
-  const url: string = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}/posts`;
+  const url: string = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}${constants.POSTS_ROUTE}`;
+
+  //custom hook to fetch blog posts
   const [data, error, loading] = useFetch(url);
+
   const [filteredData, setFilteredData] = useState(data);
   const [isfiltered, setFiltered] = useState(false);
-
   const deletePost = (id: number, index: number) => {
     let filtered = (isfiltered ? filteredData : data).filter((post: any) => {
       return post.id !== id;
@@ -47,12 +50,7 @@ const Posts: React.FC = () => {
   };
 
   if (error) {
-    return (
-      <Result
-        status={constants.ERROR_STATUS}
-        subTitle={constants.SOMETHING_WENT_WRONG_TEXT}
-      />
-    );
+    return <GenericError />;
   }
 
   return loading ? (
@@ -77,11 +75,17 @@ const Posts: React.FC = () => {
               width={400}
               height={250}
               style={{ padding: "10px" }}
-              onClick={() => history.push(`/posts/${post?.id}`)}
+              onClick={() =>
+                history.push(`${constants.POSTS_ROUTE}/${post?.id}`)
+              }
             />
           </div>
           <div style={{ alignSelf: "baseline", marginLeft: "10px" }}>
-            <div onClick={() => history.push(`/posts/${post?.id}`)}>
+            <div
+              onClick={() =>
+                history.push(`${constants.POSTS_ROUTE}/${post?.id}`)
+              }
+            >
               <h2>{post?.title}</h2>
               <p>{post?.body}</p>
             </div>
@@ -89,7 +93,9 @@ const Posts: React.FC = () => {
               <Flex gap="small" wrap="wrap" justify={"start"}>
                 <Button
                   type="default"
-                  onClick={() => history.push(`/posts/${post?.id}`)}
+                  onClick={() =>
+                    history.push(`${constants.POSTS_ROUTE}/${post?.id}`)
+                  }
                 >
                   {constants.EDIT_TEXT}
                 </Button>

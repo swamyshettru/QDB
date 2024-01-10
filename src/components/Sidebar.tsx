@@ -1,4 +1,3 @@
-import React from "react";
 import "../App.css";
 import {
   UserOutlined,
@@ -9,11 +8,7 @@ import { Layout, Menu, Space, Avatar, Spin } from "antd";
 import logo from "../images/logo.png";
 import { useHistory } from "react-router-dom";
 import { getRandomNumber } from "../helper/Utils";
-import {
-  BLOGS_LABEL,
-  DASHBOARD_LABEL,
-  PROFILE_SOURCE,
-} from "../helper/constants";
+import * as constants from "../helper/constants";
 import { useFetch } from "../hooks/useFetch";
 
 const { Sider } = Layout;
@@ -24,10 +19,10 @@ type sideBarProps = {
 
 const Sidebar = (props: sideBarProps) => {
   let history = useHistory();
-
   const randomUser = getRandomNumber(1, 10);
   const url = `${process.env.REACT_APP_BASE_API_URL_USERS}${randomUser}`;
 
+  //fetch users from custom hook
   const [data, error, loading] = useFetch(url);
 
   if (error) {
@@ -53,16 +48,14 @@ const Sidebar = (props: sideBarProps) => {
             style={{ margin: "20px 0 0 17px" }}
             onClick={() => history.push("/")}
           />
-          {error && <Avatar size={100} icon={<UserOutlined />} />}
-          {!error && (
-            <Space direction="vertical" size={16} align="center">
-              <Avatar
-                size={100}
-                icon={<UserOutlined />}
-                src={PROFILE_SOURCE || <UserOutlined />}
-              />
-            </Space>
-          )}
+          {/* display user details */}
+          <Space direction="vertical" size={16} align="center">
+            <Avatar
+              size={100}
+              icon={<UserOutlined />}
+              src={constants.PROFILE_SOURCE || <UserOutlined />}
+            />
+          </Space>
           <Space direction="vertical" size={5} align="center">
             <span style={{ fontWeight: "bold" }}>{data?.name}</span>
             <span style={{ textTransform: "lowercase", fontSize: "small" }}>
@@ -70,6 +63,7 @@ const Sidebar = (props: sideBarProps) => {
             </span>
           </Space>
         </Space>
+        {/* display menu items */}
         <Menu
           theme="light"
           mode="inline"
@@ -77,14 +71,14 @@ const Sidebar = (props: sideBarProps) => {
           style={{ marginTop: "30px" }}
           items={[
             {
-              key: "/dashboard",
+              key: constants.DASHBOARD_ROUTE,
               icon: <DashboardOutlined />,
-              label: DASHBOARD_LABEL,
+              label: constants.DASHBOARD_LABEL,
             },
             {
-              key: "/posts",
+              key: constants.POSTS_ROUTE,
               icon: <SolutionOutlined />,
-              label: BLOGS_LABEL,
+              label: constants.BLOGS_LABEL,
             },
           ]}
           onClick={({ key }) => history.push(key)}

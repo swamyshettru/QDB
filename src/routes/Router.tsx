@@ -6,7 +6,7 @@ import Posts from "../components/Posts";
 import Dashboard from "../components/Dashboard";
 import Success from "../components/Success";
 
-const getRoutes = () => {
+const GetRoutes = () => {
   /**
    * Switch to specific routes
    * display fallback component on error
@@ -49,4 +49,4 @@ const getRoutes = () => {
   );
 };
 
-export default getRoutes;
+export default GetRoutes;
